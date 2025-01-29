@@ -11,9 +11,8 @@ let spacing = 20;
 
 function setup() {
   let canvas = createCanvas(600, 400);
-  canvas.elt.id = "p5-canvas"; // Give the canvas an ID (optional)
-  document.getElementById('p5-container').appendChild(canvas.elt); // Manually move it
-
+  canvas.elt.id = "p5-canvas";
+  document.getElementById('p5-container').appendChild(canvas.elt);
   // RiTa Concordance Parameters
   var params = {
     ignoreStopWords: true,
@@ -41,6 +40,13 @@ function setup() {
     //xOffsets[i] = width;
     xOffsets[i] = 20;
   }
+  
+  
+  button = createButton("▶");
+  button.mousePressed(togglePlaying);
+  button.style('background-color', '#FF5722');
+  button.size(canvas.width/10,canvas.height/10)
+  
 }
 
 function draw() {
@@ -85,4 +91,17 @@ function getLineWidth(words) {
     totalWidth += textWidth(word) + spacing;
   }
   return totalWidth;
+}
+
+// controla o audio
+function togglePlaying() {
+  if (!song.isPlaying()) {
+    song.play();
+    song.setVolume(0.3);
+    button.html("⏸");
+  } else {
+    song.pause();
+    button.html(" ▶ ");
+  }
+
 }
