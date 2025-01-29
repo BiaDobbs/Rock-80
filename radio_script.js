@@ -10,7 +10,7 @@ let spacing = 20;
 
 
 function setup() {
-  let canvas = createCanvas(600, 400);
+  let canvas = createCanvas(windowWidth-200, 400);
   canvas.elt.id = "p5-canvas";
   document.getElementById('p5-container').appendChild(canvas.elt);
   // RiTa Concordance Parameters
@@ -98,7 +98,7 @@ function togglePlaying() {
   if (!song.isPlaying()) {
     song.play();
     song.setVolume(0.3);
-    button.html("⏸");
+    button.html(" ❚❚ ");
   } else {
     song.pause();
     button.html(" ▶ ");
