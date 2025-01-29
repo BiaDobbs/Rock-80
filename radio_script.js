@@ -115,13 +115,17 @@ function togglePlaying() {
 }
 function positionButton() {
   let canvasRect = canvas.elt.getBoundingClientRect(); // Get canvas position
-  button.size(canvasRect.width / 10, canvasRect.height / 10);
+  let btnWidth = canvasRect.width / 10;
+  let btnHeight = canvasRect.height / 10;
 
-  button.style('left', `${canvasRect.left + canvasRect.width / 2.5}px`);
-  button.style('top', `${canvasRect.top + canvasRect.height * 0.85}px`);
+  button.size(btnWidth, btnHeight);
+  
+  // Position the button at the bottom center of the canvas
+  button.style('left', `${canvasRect.left + (canvasRect.width / 2) - (btnWidth / 2)}px`);
+  button.style('top', `${canvasRect.top + canvasRect.height - (btnHeight * 1.5)}px`);
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, 400);
+  resizeCanvas(windowWidth-20, 400);
   positionButton();
 }
