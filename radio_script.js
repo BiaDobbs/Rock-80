@@ -11,9 +11,9 @@ let spacing = 20;
 
 function setup() {
   let canvas = createCanvas(windowWidth-20, 400);
-  canvas.elt.id = "p5-canvas";
-  document.getElementById('p5-container').appendChild(canvas.elt);
-  
+  //canvas.elt.id = "p5-canvas";
+  //document.getElementById('p5-container').appendChild(canvas.elt);
+  canvas.parent('p5-container');
   // RiTa Concordance Parameters
   var params = {
     ignoreStopWords: true,
@@ -45,6 +45,7 @@ function setup() {
   
   button = createButton("▶");
   button.mousePressed(togglePlaying);
+  
   button.style('background-color', '#FF5722');
   button.style('border', 'none');
   button.style('font-size', '20px');
@@ -121,9 +122,8 @@ function positionButton() {
   button.size(btnWidth, btnHeight);
   
   // Position the button at the bottom center of the canvas
-  button.style('left', `${canvasRect.left + (canvasRect.width / 2) - (btnWidth / 2)}px`);
-  button.style('top', `${canvasRect.top + canvasRect.height - (btnHeight * 1.5)}px`);
-}
+  button.style('left', `${canvasRect.left + canvasRect.width / 2 - btnWidth / 2}px`);
+  button.style('top', `${canvasRect.top + canvasRect.height - btnHeight - 10}px`); // Adjust for padding}
 
 function windowResized() {
   resizeCanvas(windowWidth-20, 400);
