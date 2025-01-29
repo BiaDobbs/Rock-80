@@ -13,6 +13,7 @@ function setup() {
   let canvas = createCanvas(windowWidth-20, 400);
   canvas.elt.id = "p5-canvas";
   document.getElementById('p5-container').appendChild(canvas.elt);
+  
   // RiTa Concordance Parameters
   var params = {
     ignoreStopWords: true,
@@ -45,8 +46,6 @@ function setup() {
   button = createButton("▶");
   button.mousePressed(togglePlaying);
   button.style('background-color', '#FF5722');
-  button.size(canvas.width/10,canvas.height/10)
-  button.position(canvas.width/2.2,canvas.height/1.2)
   button.style('border', 'none');
   button.style('font-size', '20px');
   button.style('cursor', 'pointer');
