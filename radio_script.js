@@ -46,7 +46,7 @@ function setup() {
   button.mousePressed(togglePlaying);
   button.style('background-color', '#FF5722');
   button.size(canvas.width/10,canvas.height/10)
-  
+  button.position(canvas.width/2.2,canvas.height/1.2)
 }
 
 function draw() {
