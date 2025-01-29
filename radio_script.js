@@ -10,10 +10,9 @@ let spacing = 20;
 
 
 function setup() {
-  let canvas = createCanvas(windowWidth-20, 400);
-  //canvas.elt.id = "p5-canvas";
-  //document.getElementById('p5-container').appendChild(canvas.elt);
-  canvas.parent('p5-container');
+  let canvas = createCanvas(windowWidth-200, 400);
+  canvas.elt.id = "p5-canvas";
+  document.getElementById('p5-container').appendChild(canvas.elt);
   // RiTa Concordance Parameters
   var params = {
     ignoreStopWords: true,
@@ -45,17 +44,9 @@ function setup() {
   
   button = createButton("▶");
   button.mousePressed(togglePlaying);
-  
   button.style('background-color', '#FF5722');
-  button.style('border', 'none');
-  button.style('font-size', '20px');
-  button.style('cursor', 'pointer');
-  button.style('position', 'absolute'); 
-
-  // Append the button to the p5-container div
-  document.getElementById('p5-container').appendChild(button.elt);
-
- positionButton();
+  button.size(canvas.width/10,canvas.height/10)
+  button.position(canvas.width/2.2,canvas.height/1.2)
 }
 
 function draw() {
@@ -113,19 +104,4 @@ function togglePlaying() {
     button.html(" ▶ ");
   }
 
-}
-function positionButton() {
-  let canvasRect = canvas.elt.getBoundingClientRect(); // Get canvas position
-  let btnWidth = canvasRect.width / 10;
-  let btnHeight = canvasRect.height / 10;
-
-  button.size(btnWidth, btnHeight);
-  
-  // Position the button at the bottom center of the canvas
-  button.style('left', `${canvasRect.left + canvasRect.width / 2 - btnWidth / 2}px`);
-  button.style('top', `${canvasRect.top + canvasRect.height - btnHeight - 10}px`); // Adjust for padding}
-
-function windowResized() {
-  resizeCanvas(windowWidth-20, 400);
-  positionButton();
 }
