@@ -10,7 +10,7 @@ let spacing = 20;
 
 
 function setup() {
-  let canvas = createCanvas(windowWidth, 400);
+  let canvas = createCanvas(windowWidth-100, 400);
   canvas.elt.id = "p5-canvas"; // Give the canvas an ID (optional)
   document.getElementById('p5-container').appendChild(canvas.elt); // Manually move it
 
