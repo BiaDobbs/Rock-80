@@ -10,8 +10,9 @@ let spacing = 20;
 
 
 function setup() {
-  createCanvas(windowWidth, 400);
-  canvas.parent('p5-container');
+  let canvas = createCanvas(windowWidth, 400);
+  canvas.elt.id = "p5-canvas"; // Give the canvas an ID (optional)
+  document.getElementById('p5-container').appendChild(canvas.elt); // Manually move it
 
   // RiTa Concordance Parameters
   var params = {
