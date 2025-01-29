@@ -45,8 +45,8 @@ function setup() {
   button = createButton("▶");
   button.mousePressed(togglePlaying);
   button.style('background-color', '#FF5722');
-  button.size(canvas.width/10,canvas.height/10)
-  button.position(canvas.width/2.2,canvas.height/1.2)
+
+  document.getElementById('p5-container').appendChild(button.elt);
 }
 
 function draw() {
@@ -104,4 +104,7 @@ function togglePlaying() {
     button.html(" ▶ ");
   }
 
+}
+function windowResized() {
+  resizeCanvas(windowWidth-20, 400);
 }
