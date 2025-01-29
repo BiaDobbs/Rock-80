@@ -11,7 +11,7 @@ let spacing = 20;
 
 function setup() {
   createCanvas(windowWidth, 400);
-  
+  canvas.parent('p5-container');
 
   // RiTa Concordance Parameters
   var params = {
