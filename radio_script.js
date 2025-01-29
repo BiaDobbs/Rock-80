@@ -10,7 +10,7 @@ let spacing = 20;
 
 
 function setup() {
-  let canvas = createCanvas(windowWidth-200, 400);
+  let canvas = createCanvas(windowWidth-20, 400);
   canvas.elt.id = "p5-canvas";
   document.getElementById('p5-container').appendChild(canvas.elt);
   // RiTa Concordance Parameters
@@ -47,6 +47,15 @@ function setup() {
   button.style('background-color', '#FF5722');
   button.size(canvas.width/10,canvas.height/10)
   button.position(canvas.width/2.2,canvas.height/1.2)
+  button.style('border', 'none');
+  button.style('font-size', '20px');
+  button.style('cursor', 'pointer');
+  button.style('position', 'absolute'); 
+
+  // Append the button to the p5-container div
+  document.getElementById('p5-container').appendChild(button.elt);
+
+ positionButton();
 }
 
 function draw() {
@@ -104,4 +113,16 @@ function togglePlaying() {
     button.html(" ▶ ");
   }
 
+}
+function positionButton() {
+  let canvasRect = canvas.elt.getBoundingClientRect(); // Get canvas position
+  button.size(canvasRect.width / 10, canvasRect.height / 10);
+
+  button.style('left', `${canvasRect.left + canvasRect.width / 2.5}px`);
+  button.style('top', `${canvasRect.top + canvasRect.height * 0.85}px`);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, 400);
+  positionButton();
 }
