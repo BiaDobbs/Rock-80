@@ -18,7 +18,7 @@ function setup() {
     return;
   }
   
-  let canvas = createCanvas(windowWidth, 400);
+  let canvas = createCanvas(800, 400);
   canvas.elt.id = "p5-canvas";
   document.getElementById('p5-container').appendChild(canvas.elt);
   // RiTa Concordance Parameters
