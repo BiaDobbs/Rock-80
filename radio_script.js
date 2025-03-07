@@ -114,8 +114,3 @@ function togglePlaying() {
     song.pause();
     button.html(" ▶ ");
   }
-
-}
-function windowResized() {
-  resizeCanvas(800, 400);
-}
