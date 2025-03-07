@@ -63,16 +63,14 @@ function draw() {
  
   noStroke();
   textSize(20);
-
-  text("FM", 20, 140);
-  text("AM", 20, 280);
-  textSize(18);
+  fill(0)
   rect(0, height / 2 - rectHeight / 2, width, rectHeight);
+  fill(255)
   
   
   // linhas
   for (let i = 0; i < numLines; i++) {
-    drawLineOfWords(lines[i], xOffsets[i], height / 2 + (i - (numLines - 1) / 2) * (rectHeight / numLines)); 
+    drawLineOfWords(lines[i], xOffsets[i], height / 2 + (i - (numLines - 1) / 2) * (rectHeight / numLines)+5); 
     xOffsets[i] -= speed; 
 
     // Reseta depois que sai, melhorar depois
@@ -84,7 +82,7 @@ function draw() {
   stroke("#FF5722");
   strokeWeight(5);
   line(width/2, 260, width/2, 200);
-  image(img, -20, 15, width+100, height, 0, 0, img.width, img.height);
+  image(img, 0, 15, width, height, 0, 0, img.width, img.height);
 }
 
 function drawLineOfWords(words, x, y) {
@@ -119,5 +117,5 @@ function togglePlaying() {
 
 }
 function windowResized() {
-  resizeCanvas(windowWidth, 400);
+  resizeCanvas(800, 400);
 }
