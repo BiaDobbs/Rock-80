@@ -1,16 +1,24 @@
 let words = [];
 let lines = [];
 let xOffsets = [];
-let speed = 1.6;
+let speed = 1.2;
 let rectHeight = 100;
 let txt;
-let numLines = 4;
-let spacing = 20; 
+let numLines = 3;
+let spacing = 10; 
 
 
 
 function setup() {
-  let canvas = createCanvas(windowWidth-200, 400);
+  
+    // Make sure the container exists before adding the canvas
+  let container = document.getElementById("canvas-wrapper");
+  if (!container) {
+    console.error("Canvas container not found!");
+    return;
+  }
+  
+  let canvas = createCanvas(windowWidth, 400);
   canvas.elt.id = "p5-canvas";
   document.getElementById('p5-container').appendChild(canvas.elt);
   // RiTa Concordance Parameters
@@ -45,20 +53,23 @@ function setup() {
   button = createButton("▶");
   button.mousePressed(togglePlaying);
   button.style('background-color', '#FF5722');
-
+  button.size(canvas.width/10,canvas.height/10)
+  button.style('margin-top', '-50px');
+  
   document.getElementById('p5-container').appendChild(button.elt);
 }
 
 function draw() {
-  background(255);
+ 
+  noStroke();
   textSize(20);
-  stroke(0);
+
   text("FM", 20, 140);
   text("AM", 20, 280);
-  textSize(14);
+  textSize(18);
   rect(0, height / 2 - rectHeight / 2, width, rectHeight);
   
-  noStroke();
+  
   // linhas
   for (let i = 0; i < numLines; i++) {
     drawLineOfWords(lines[i], xOffsets[i], height / 2 + (i - (numLines - 1) / 2) * (rectHeight / numLines)); 
@@ -67,11 +78,13 @@ function draw() {
     // Reseta depois que sai, melhorar depois
     if (xOffsets[i] < -getLineWidth(lines[i])) {
       //xOffsets[i] = 0; 
-      xOffsets[i] = width; 
+      xOffsets[i] = img.width; 
     }
   }
-  stroke("red");
+  stroke("#FF5722");
+  strokeWeight(5);
   line(width/2, 260, width/2, 200);
+  image(img, -20, 15, width+100, height, 0, 0, img.width, img.height);
 }
 
 function drawLineOfWords(words, x, y) {
@@ -106,5 +119,5 @@ function togglePlaying() {
 
 }
 function windowResized() {
-  resizeCanvas(windowWidth-20, 400);
+  resizeCanvas(windowWidth, 400);
 }
