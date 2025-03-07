@@ -21,10 +21,6 @@ function setup() {
   let canvas = createCanvas(windowWidth, min(400, windowHeight * 0.8));
   canvas.elt.id = "p5-canvas";
   document.getElementById('p5-container').appendChild(canvas.elt);
-
-  // Ensure no overflow
-  document.body.style.overflow = "hidden";
-  document.documentElement.style.overflow = "hidden";
   
   // RiTa Concordance Parameters
   var params = {
@@ -131,12 +127,11 @@ function windowResized() {
 
 function updateButtonPosition() {
   let canvas = document.getElementById("p5-canvas");
+  if (!canvas) return;
+
   let rect = canvas.getBoundingClientRect();
 
-  button.position(
-    rect.left + rect.width / 2 - button.width / 2, 
-    rect.bottom - button.height - 10
-  );
+  button.style.position = "absolute";
+  button.style.left = `${rect.left + rect.width / 2 - button.elt.offsetWidth / 2}px`;
+  button.style.top = `${rect.bottom - button.elt.offsetHeight - 10}px`;
 }
-
-
