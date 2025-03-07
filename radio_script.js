@@ -114,3 +114,4 @@ function togglePlaying() {
     song.pause();
     button.html(" ▶ ");
   }
+}
