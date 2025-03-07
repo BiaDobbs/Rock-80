@@ -18,9 +18,14 @@ function setup() {
     return;
   }
   
-  let canvas = createCanvas(800, 400);
+  let canvas = createCanvas(windowWidth, min(400, windowHeight * 0.8));
   canvas.elt.id = "p5-canvas";
   document.getElementById('p5-container').appendChild(canvas.elt);
+
+  // Ensure no overflow
+  document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden";
+  
   // RiTa Concordance Parameters
   var params = {
     ignoreStopWords: true,
@@ -57,6 +62,8 @@ function setup() {
   button.style('margin-top', '-50px');
   
   document.getElementById('p5-container').appendChild(button.elt);
+
+  updateButtonPosition();
 }
 
 function draw() {
@@ -82,7 +89,7 @@ function draw() {
   stroke("#FF5722");
   strokeWeight(5);
   line(width/2, 260, width/2, 200);
-  image(img, 0, 15, width, height, 0, 0, img.width, img.height);
+  image(img, 0, 28, width, height, 0, 0, img.width, img.height);
 }
 
 function drawLineOfWords(words, x, y) {
@@ -114,4 +121,22 @@ function togglePlaying() {
     song.pause();
     button.html(" ▶ ");
   }
+
 }
+
+function windowResized() {
+  resizeCanvas(windowWidth, min(400, windowHeight * 0.8));
+  updateButtonPosition();
+}
+
+function updateButtonPosition() {
+  let canvas = document.getElementById("p5-canvas");
+  let rect = canvas.getBoundingClientRect();
+
+  button.position(
+    rect.left + rect.width / 2 - button.width / 2, 
+    rect.bottom - button.height - 10
+  );
+}
+
+
