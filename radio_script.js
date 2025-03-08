@@ -2,26 +2,40 @@ let words = [];
 let lines = [];
 let xOffsets = [];
 let speed = 1.2;
-let rectHeight = 100;
+let rectHeight = 120;
 let txt;
 let numLines = 3;
-let spacing = 10; 
-
-
+let spacing = 20;
+let baseWidth = 800;
+let scaleFactor;
+let buttonX, buttonY, buttonW, buttonH;
+let isPlaying = false;
 
 function setup() {
-  
-    // Make sure the container exists before adding the canvas
+  // Ensure the canvas exists to avoid errors
   let container = document.getElementById("canvas-wrapper");
   if (!container) {
     console.error("Canvas container not found!");
     return;
   }
-  
-  let canvas = createCanvas(windowWidth, min(400, windowHeight * 0.8));
+
+  // Set up the aspect ratio for the image
+  imgAspectRatio = img.width / img.height;
+
+  let canvasWidth = windowWidth;
+  let canvasHeight = canvasWidth / imgAspectRatio;
+
+  if (canvasHeight > windowHeight * 0.8) {
+    canvasHeight = windowHeight * 0.8;
+    canvasWidth = canvasHeight * imgAspectRatio;
+  }
+
+  let canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.elt.id = "p5-canvas";
-  document.getElementById('p5-container').appendChild(canvas.elt);
-  
+  document.getElementById("p5-container").appendChild(canvas.elt);
+
+  scaleFactor = width / baseWidth;
+
   // RiTa Concordance Parameters
   var params = {
     ignoreStopWords: true,
@@ -29,109 +43,140 @@ function setup() {
     ignorePunctuation: true,
   };
 
-  // RiTa Concordance
   count = RiTa.concordance(txt.join(" "), params);
   words = Object.keys(count);
-
-  // Sorting words by count
   words.sort((a, b) => count[b] - count[a]);
 
-  // Distribui as palavras nas linhas
-  let maxWordsPerLine = Math.floor((width - 40) / 100); 
-  let wordsPerLine = Math.ceil(words.length / numLines); 
-
+  // Distribute words into lines
+  let wordsPerLine = Math.ceil(words.length / numLines);
   for (let i = 0; i < numLines; i++) {
-    lines[i] = words.slice(i * wordsPerLine, (i + 1) * wordsPerLine); 
+    lines[i] = words.slice(i * wordsPerLine, (i + 1) * wordsPerLine);
   }
 
-  // posição inicial das linhas
+  // Initialize the offsets (starting positions of each line)
   for (let i = 0; i < numLines; i++) {
-    //xOffsets[i] = width;
-    xOffsets[i] = 20;
+    xOffsets[i] = width; // Start lines off-screen to the right
   }
-  
-  
-  button = createButton("▶");
-  button.mousePressed(togglePlaying);
-  button.style('background-color', '#FF5722');
-  button.size(canvas.width/10,canvas.height/10)
-  button.style('margin-top', '-50px');
-  
-  document.getElementById('p5-container').appendChild(button.elt);
-
-  updateButtonPosition();
 }
 
 function draw() {
- 
-  noStroke();
-  textSize(20);
-  fill(0)
-  rect(0, height / 2 - rectHeight / 2, width, rectHeight);
-  fill(255)
-  
-  
-  // linhas
-  for (let i = 0; i < numLines; i++) {
-    drawLineOfWords(lines[i], xOffsets[i], height / 2 + (i - (numLines - 1) / 2) * (rectHeight / numLines)+5); 
-    xOffsets[i] -= speed; 
+  background(255);
+  scaleFactor = width / baseWidth;
 
-    // Reseta depois que sai, melhorar depois
-    if (xOffsets[i] < -getLineWidth(lines[i])) {
-      //xOffsets[i] = 0; 
-      xOffsets[i] = img.width; 
+  noStroke();
+  textSize(20 * scaleFactor);
+  fill(0);
+  rect(
+    0,
+    height / 2.4 - (rectHeight * scaleFactor) / 2,
+    width,
+    rectHeight * scaleFactor
+  );
+  fill(255);
+
+  // Draw the lines of text and move them left
+  for (let i = 0; i < numLines; i++) {
+    drawLineOfWords(
+      lines[i],
+      xOffsets[i],
+      height / 2.4 + (i - (numLines - 1) / 2) * (rectHeight / (numLines * 1.5)) * scaleFactor
+    );
+
+    // Move the line to the left
+    xOffsets[i] -= speed * scaleFactor;
+
+    // If the line goes completely off-screen to the left, reset its position to the right
+    if (xOffsets[i] + getLineWidth(lines[i]) < 0) {
+      xOffsets[i] = width;
     }
   }
+
   stroke("#FF5722");
-  strokeWeight(5);
-  line(width/2, 260, width/2, 200);
-  image(img, 0, 28, width, height, 0, 0, img.width, img.height);
+  strokeWeight(5 * scaleFactor);
+  line(width / 2, 200 * scaleFactor, width / 2, 120 * scaleFactor);
+
+  let aspectRatio = img.width / img.height;
+  let targetWidth = width;
+  let targetHeight = width / aspectRatio;
+
+  if (targetHeight > height) {
+    targetHeight = height;
+    targetWidth = height * aspectRatio;
+  }
+
+  image(img, 0, 0, width, height);
+
+  // Custom button inside canvas
+  drawCanvasButton();
 }
 
 function drawLineOfWords(words, x, y) {
   let xStart = x;
 
-  // Desenha as palavras
+  // Draw the words
   for (let word of words) {
     text(word, xStart, y);
-    xStart += textWidth(word) + spacing; // Para não ter overlap
+    xStart += textWidth(word) + spacing * scaleFactor + 10; // Add space between words
   }
 }
 
-// tamanho das linhas
+// Calculate the width of the text line
 function getLineWidth(words) {
-  let totalWidth = 1;
+  let totalWidth = 0;
   for (let word of words) {
-    totalWidth += textWidth(word) + spacing;
+    totalWidth += textWidth(word) + spacing * scaleFactor;
   }
   return totalWidth;
 }
 
-// controla o audio
+// Custom button inside canvas
+function drawCanvasButton() {
+  buttonW = 40 * scaleFactor;
+  buttonH = 40 * scaleFactor;
+  buttonX = width / 2 - buttonW / 2;
+  buttonY = height - buttonH - 20 * scaleFactor;
+
+  fill(isPlaying ? "#D32F2F" : "#FF5722");
+  noStroke();
+  rect(buttonX, buttonY, buttonW, buttonH, 1 * scaleFactor); // Rounded edges
+
+  fill(255);
+  textSize(25 * scaleFactor);
+  textAlign(CENTER, CENTER);
+  text(isPlaying ? "❚❚" : "▶", buttonX + buttonW / 2, buttonY + buttonH / 2);
+}
+
+// Detect button press
+function mousePressed() {
+  if (
+    mouseX > buttonX &&
+    mouseX < buttonX + buttonW &&
+    mouseY > buttonY &&
+    mouseY < buttonY + buttonH
+  ) {
+    togglePlaying();
+  }
+}
+
+// Control audio playback
 function togglePlaying() {
-  if (!song.isPlaying()) {
+  isPlaying = !isPlaying;
+  if (isPlaying) {
     song.play();
-    song.setVolume(0.3);
-    button.html(" ❚❚ ");
   } else {
     song.pause();
-    button.html(" ▶ ");
   }
-
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, min(400, windowHeight * 0.8));
-  updateButtonPosition();
-}
+  let newCanvasWidth = windowWidth;
+  let newCanvasHeight = newCanvasWidth / imgAspectRatio;
 
-function updateButtonPosition() {
-  let canvas = document.getElementById("p5-canvas");
-  if (!canvas) return;
+  if (newCanvasHeight > windowHeight * 0.8) {
+    newCanvasHeight = windowHeight * 0.8;
+    newCanvasWidth = newCanvasHeight * imgAspectRatio;
+  }
 
-  let rect = canvas.getBoundingClientRect();
-
-  button.style.position = "absolute";
-  button.style.left = `${rect.left + rect.width / 2 - button.elt.offsetWidth / 2}px`;
-  button.style.top = `${rect.bottom - button.elt.offsetHeight - 10}px`;
+  resizeCanvas(newCanvasWidth, newCanvasHeight);
+  scaleFactor = width / baseWidth;
 }
