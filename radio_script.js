@@ -19,7 +19,7 @@ function setup() {
     return;
   }
 
-  // Set up the aspect ratio for the image
+  // aspect ratio 
   imgAspectRatio = img.width / img.height;
 
   let canvasWidth = windowWidth;
@@ -55,7 +55,7 @@ function setup() {
 
   // Initialize the offsets (starting positions of each line)
   for (let i = 0; i < numLines; i++) {
-    xOffsets[i] = width; // Start lines off-screen to the right
+    xOffsets[i] = width-200* scaleFactor; // Start lines off-screen to the right
   }
 }
 
@@ -79,7 +79,7 @@ function draw() {
     drawLineOfWords(
       lines[i],
       xOffsets[i],
-      height / 2.4 + (i - (numLines - 1) / 2) * (rectHeight / (numLines * 1.5)) * scaleFactor
+      height / 2.28 + (i - (numLines - 1) / 2) * (rectHeight / (numLines * 1.5)) * scaleFactor
     );
 
     // Move the line to the left
@@ -131,19 +131,24 @@ function getLineWidth(words) {
 
 // Custom button inside canvas
 function drawCanvasButton() {
-  buttonW = 40 * scaleFactor;
-  buttonH = 40 * scaleFactor;
-  buttonX = width / 2 - buttonW / 2;
-  buttonY = height - buttonH - 20 * scaleFactor;
+  buttonW = 32 * scaleFactor;
+  buttonH = 32 * scaleFactor;
+  buttonX = width / 1.4 - buttonW / 2;
+  buttonY = height - buttonH - 34 * scaleFactor;
 
-  fill(isPlaying ? "#D32F2F" : "#FF5722");
+  blendMode(MULTIPLY);
+  fill(isPlaying ? "#FF5722":"#686464" );
+  //noFill()
   noStroke();
-  rect(buttonX, buttonY, buttonW, buttonH, 1 * scaleFactor); // Rounded edges
+  rect(buttonX, buttonY, buttonW/2, buttonH, 1 * scaleFactor);
+  fill(isPlaying ? "#686464" : "#FF5722");
+  rect(buttonX+buttonW/2, buttonY, buttonW/2, buttonH, 1 * scaleFactor);
+  blendMode(BLEND);
 
-  fill(255);
-  textSize(25 * scaleFactor);
-  textAlign(CENTER, CENTER);
-  text(isPlaying ? "❚❚" : "▶", buttonX + buttonW / 2, buttonY + buttonH / 2);
+  //fill(255);
+  //textSize(25 * scaleFactor);
+  //textAlign(CENTER, CENTER);
+  //text(isPlaying ? "❚❚" : "▶", buttonX + buttonW / 2, buttonY + buttonH / 2);
 }
 
 // Detect button press
@@ -162,7 +167,7 @@ function mousePressed() {
 function togglePlaying() {
   isPlaying = !isPlaying;
   if (isPlaying) {
-    song.play();
+    song.loop();
   } else {
     song.pause();
   }
