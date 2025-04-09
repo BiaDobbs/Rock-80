@@ -10,6 +10,7 @@ let baseWidth = 800;
 let scaleFactor;
 let buttonX, buttonY, buttonW, buttonH;
 let isPlaying = false;
+let storedTime = 0;
 
 function setup() {
   // Ensure the canvas exists to avoid errors
@@ -166,11 +167,23 @@ function mousePressed() {
 // Control audio playback
 function togglePlaying() {
   isPlaying = !isPlaying;
-  if (isPlaying) {
-    song.loop();
+  
+  if (!isPlaying) {
+
+    if (storedTime > 0) {
+      song.loop(); 
+      song.jump(storedTime);
+    } else {
+      song.loop(); 
+    }
+    isPlaying = true;
   } else {
+
     song.pause();
+    storedTime = song.currentTime(); 
+    isPlaying = false;
   }
+  
 }
 
 function windowResized() {
