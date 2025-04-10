@@ -138,18 +138,15 @@ function drawCanvasButton() {
   buttonY = height - buttonH - 34 * scaleFactor;
 
   blendMode(MULTIPLY);
-  fill(isPlaying ? "#FF5722":"#686464" );
+  fill(song.isPlaying() ? "#FF5722":"#3F3D3D" );
   //noFill()
-  noStroke();
-  rect(buttonX, buttonY, buttonW/2, buttonH, 1 * scaleFactor);
-  fill(isPlaying ? "#686464" : "#FF5722");
-  rect(buttonX+buttonW/2, buttonY, buttonW/2, buttonH, 1 * scaleFactor);
+  //noStroke();
+  rect(buttonX, buttonY+8, buttonW/2, buttonH-15, 1 * scaleFactor);
+  fill(song.isPlaying() ? "#3F3D3D" : "#FF5722");
+  rect(buttonX+buttonW/2, buttonY+8, buttonW/2, buttonH-15, 1 * scaleFactor);
   blendMode(BLEND);
+ 
 
-  //fill(255);
-  //textSize(25 * scaleFactor);
-  //textAlign(CENTER, CENTER);
-  //text(isPlaying ? "❚❚" : "▶", buttonX + buttonW / 2, buttonY + buttonH / 2);
 }
 
 // Detect button press
@@ -166,24 +163,14 @@ function mousePressed() {
 
 // Control audio playback
 function togglePlaying() {
-  isPlaying = !isPlaying;
-  
-  if (!isPlaying) {
+  if (!song.isPlaying()) {
+    song.loop();
 
-    if (storedTime > 0) {
-      song.loop(); 
-      song.jump(storedTime);
-    } else {
-      song.loop(); 
-    }
-    isPlaying = true;
   } else {
-
     song.pause();
-    storedTime = song.currentTime(); 
-    isPlaying = false;
+
   }
-  
+
 }
 
 function windowResized() {
